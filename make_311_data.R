@@ -1,8 +1,7 @@
 library(dplyr)
 library(sf)
 
-# 311 reports
-d <- read.csv("/Users/carsonhartlage/Downloads/Cincinnati_311_(Non-Emergency)_Service_Requests_20250821.csv") |>
+d <- read.csv("Cincinnati_311_(Non-Emergency)_Service_Requests_20250821.csv") |>
   mutate(DATE = as.Date(DATE_CREATED, format = "%Y %b %d %I:%M:%S %p")
   ) 
 
@@ -50,3 +49,9 @@ df <- df |>
   st_transform(st_crs(cincy_tracts)) |>
   st_join(cincy_tracts) |>
   st_drop_geometry()
+
+library(DBI)
+library(RSQLite)
+con <- dbConnect(RSQLite::SQLite(), "final_project.sqlite")
+dbWriteTable(con, "311_reports", df, overwrite = TRUE)
+dbDisconnect(con)
