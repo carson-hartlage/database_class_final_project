@@ -1,12 +1,12 @@
 library(dplyr)
 library(sf)
 
-d <- read.csv("Cincinnati_311_(Non-Emergency)_Service_Requests_20250821.csv") |>
-  mutate(DATE = as.Date(DATE_CREATED, format = "%Y %b %d %I:%M:%S %p")
-  ) 
+d <- readr::read_csv("~/Desktop/Cincinnati_311_(Non-Emergency)_Service_Requests_20250821.csv") |>
+  mutate(DATE = as.Date(DATE_CREATED, format = "%Y %b %d %I:%M:%S %p")) 
 
 df <- d |>
   filter(DATE >= "2016-01-01" & DATE <= "2024-12-31" & SR_STATUS_FLAG == "CLOSED") |>
+  #select(c(SERVICE_REQUEST_ID, STATUS, SERVICE_NAME, SERVICE_CODE, DESCRIPTION, LATITUDE, LONGITUDE, DATE)) |>
   select(c(SR_NUMBER, SR_STATUS_FLAG, SR_TYPE, SR_TYPE_DESC, LATITUDE, LONGITUDE, DATE)) |>
   filter(LATITUDE != "" & LONGITUDE != "") |>
   distinct()
